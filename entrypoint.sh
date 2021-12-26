@@ -80,12 +80,11 @@ case $target in
         # shellcheck disable=SC1091
         source $makepkg_path # get PKGEXT
 
-        pwd
-        ls -l
+        ls -lR /tmp/repo
 
-        namcap "${pkgname}"-*"${PKGEXT}"
-        pacman -Qip "${pkgname}"-*"${PKGEXT}"
-        pacman -Qlp "${pkgname}"-*"${PKGEXT}"
+        #namcap "${pkgname}"-*"${PKGEXT}"
+        #pacman -Qip "${pkgname}"-*"${PKGEXT}"
+        #pacman -Qlp "${pkgname}"-*"${PKGEXT}"
         ;;
     run)
         install_deps
