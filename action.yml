@@ -25,6 +25,9 @@ inputs:
   debug:
     description: Turns debugging on
     required: false
+  makepkg:
+    description: Provide a custom makepkg.conf
+    required: false
 
 runs:
   using: docker
@@ -34,3 +37,4 @@ runs:
     - ${{ inputs.pkgname }}
     - ${{ inputs.command }}
     - ${{ inputs.debug }}
+    - ${{ inputs.makepkg }}

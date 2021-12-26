@@ -12,12 +12,24 @@ fi
 target=$1
 pkgname=$2
 command=$3
+makepkg=$5
 
 # assumes that package files are in a subdirectory
 # of the same name as "pkgname", so this works well
 # with "aurpublish" tool
 
 pkgbuild_dir=$(readlink "$pkgname" -f) # nicely cleans up path, ie. ///dsq/dqsdsq/my-package//// -> /dsq/dqsdsq/my-package
+
+makepkg_path="/etc/makepkg.conf"
+
+if [[ -n $makepkg ]]; then
+    makepkg_path=$(readlink "$makepkg" -f)
+
+    if [[ ! -e $makepkg_path ]]; then
+        echo "$makepkg does not exist."
+        exit 1
+    fi
+fi
 
 if [[ ! -d $pkgbuild_dir ]]; then
     echo "$pkgbuild_dir should be a directory."
@@ -62,10 +74,14 @@ case $target in
     pkgbuild)
         namcap PKGBUILD
         install_deps
-        makepkg --syncdeps --noconfirm
+
+        makepkg --syncdeps --noconfirm --config $makepkg_path
 
         # shellcheck disable=SC1091
-        source /etc/makepkg.conf # get PKGEXT
+        source $makepkg_path # get PKGEXT
+
+        pwd
+        ls -l
 
         namcap "${pkgname}"-*"${PKGEXT}"
         pacman -Qip "${pkgname}"-*"${PKGEXT}"
